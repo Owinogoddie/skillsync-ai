@@ -6,25 +6,30 @@ import {
   Droppable,
   Draggable,
   DropResult,
+  DraggableProvided,
+  DraggableStateSnapshot,
+  DroppableProvided,
+  DroppableStateSnapshot,
 } from "@hello-pangea/dnd";
 import { cn } from "@/lib/utils";
-import { Badge, Grid, Grip, Pencil } from "lucide-react";
+import { Grip, Pencil } from "lucide-react";
 
 interface ChaptersListProps {
   items: Chapter[];
-  onReorder: (updateData: { id: string; position: number; }[]) => void;
+  onReorder: (updateData: { id: string; position: number }[]) => void;
   onEdit: (id: string) => void;
 }
+
 export const ChaptersList = ({
   items,
   onReorder,
   onEdit,
 }: ChaptersListProps) => {
-  const [isMounted, setsMounted] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const [chapters, setChapters] = useState(items);
 
   useEffect(() => {
-    setsMounted(true);
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {
@@ -34,8 +39,8 @@ export const ChaptersList = ({
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     const items = Array.from(chapters);
-    const [reorderItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderItem);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
 
     const startIndex = Math.min(result.source.index, result.destination.index);
     const endIndex = Math.max(result.source.index, result.destination.index);
@@ -58,16 +63,18 @@ export const ChaptersList = ({
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Droppable droppableId="chapters">
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
+        {(provided: DroppableProvided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+          >
             {chapters.map((chapter, index) => (
               <Draggable
                 key={chapter.id}
                 draggableId={chapter.id}
                 index={index}
               >
-                {(provided) => (
-                  // eslint-disable-next-line
+                {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
                   <div
                     className={cn(
                       "flex items-center gap-x-2 my-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md text-sm",
@@ -76,14 +83,15 @@ export const ChaptersList = ({
                     )}
                     ref={provided.innerRef}
                     {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={{ ...provided.draggableProps.style }}
                   >
                     <div
                       className={cn(
-                        "px-2 py-3  border-r border-r-slate-200 hover:bg-slate-300 rounded-md transition",
+                        "px-2 py-3 border-r border-r-slate-200 hover:bg-slate-300 rounded-md transition",
                         chapter.isPublished &&
                           "border-r-sky-200 hover:bg-sky-200"
                       )}
-                      {...provided.dragHandleProps}
                     >
                       <Grip className="h-5 w-5" />
                     </div>
