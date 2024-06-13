@@ -21,7 +21,7 @@ export type ChapterCardHandler = {
 const ChapterCard = React.forwardRef<ChapterCardHandler, Props>(
   ({ chapter, chapterIndex, setCompletedChapters, completedChapters }, ref) => {
     const [success, setSuccess] = React.useState<boolean | null>(null);
-    const { mutate: getChapterInfo, isLoading } = useMutation({
+    const { mutate: getChapterInfo,isPending:isLoading } = useMutation({
       mutationFn: async () => {
         const response = await axios.post("/api/generate-courses/chapters", {
           chapterId: chapter.id,
