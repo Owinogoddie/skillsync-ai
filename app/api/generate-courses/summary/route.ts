@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getQuestionsFromTranscript, getTranscript } from "@/lib/youtube";
 
-export async function POST(req: Request, res: Response) {
+export async function POST(req: Request) {
   try {
     const body = await req.json();
     const { chapterId } = body;
@@ -29,9 +29,10 @@ export async function POST(req: Request, res: Response) {
       return new NextResponse("Video not supported", { status: 500 });
     }
 
-    if (transcript.length > 1000) {
+    if (transcript.split(" ").length > 1000) {
       transcript = transcript.split(" ").slice(0, 1000).join(" ");
     }
+
     const summaryPrompt = `
       You are a helpful AI capable of summarizing a YouTube transcript.
       Summarize the transcript in 250 words or less, focusing only on the main topic.
@@ -66,14 +67,10 @@ export async function POST(req: Request, res: Response) {
       summary = JSON.parse(resp);
     } catch (jsonError) {
       console.error("Failed to parse JSON response from Groq API:", jsonError);
-      console.error("Groq API response:", resp);
-      throw jsonError;
+      throw new Error("Error parsing Groq API response");
     }
 
-    const questions = await getQuestionsFromTranscript(
-      transcript,
-      chapter.title
-    );
+    const questions = await getQuestionsFromTranscript(transcript, chapter.title);
 
     if (!questions) {
       throw new Error("Failed to generate questions");
@@ -87,8 +84,7 @@ export async function POST(req: Request, res: Response) {
           question.option2,
           question.option3,
         ];
-        // Shuffle options
-        options.sort(() => Math.random() - 0.5);
+        options = options.sort(() => Math.random() - 0.5);
         return {
           question: question.question,
           answer: question.answer,
@@ -108,17 +104,12 @@ export async function POST(req: Request, res: Response) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { success: false, error: "Invalid body" },
-        { status: 400 }
-      );
-    } else {
-      console.error("Unknown error:", error);
-      return NextResponse.json(
-        { success: false, error: "Unknown error" },
-        { status: 500 }
-      );
-    }
+    console.error("Error processing request:", error);
+    const status = error instanceof z.ZodError ? 400 : 500;
+    const message = error instanceof z.ZodError ? "Invalid body" : "Unknown error";
+    return NextResponse.json(
+      { success: false, error: message },
+      { status: status }
+    );
   }
 }
