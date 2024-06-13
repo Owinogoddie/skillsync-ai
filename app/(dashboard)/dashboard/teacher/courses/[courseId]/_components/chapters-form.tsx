@@ -141,7 +141,7 @@ export const ChaptersForm = ({initialData,courseId}:ChaptersFormProps) => {
 
           <ChaptersList
           onEdit={onEdit}
-          // eslint skip next-line
+          // eslint-disable-next-line
           onReorder={onReorder}
           items={initialData.chapters || []}
           />

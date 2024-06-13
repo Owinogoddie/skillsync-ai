@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { CourseSidebar } from "./course-sidebar";
+import { Chapter, Course, UserProgress } from "@prisma/client";
 
 interface CourseMobileSidebarProps {
   course: Course & {

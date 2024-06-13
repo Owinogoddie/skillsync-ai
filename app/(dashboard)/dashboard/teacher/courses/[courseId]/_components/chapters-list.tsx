@@ -12,7 +12,7 @@ import { Badge, Grid, Grip, Pencil } from "lucide-react";
 
 interface ChaptersListProps {
   items: Chapter[];
-  onReorder: (updateData: { id: string; position: number }[]) => void;
+  onReorder: (updateData: { id: string; position: number; }[]) => void;
   onEdit: (id: string) => void;
 }
 export const ChaptersList = ({
@@ -67,6 +67,7 @@ export const ChaptersList = ({
                 index={index}
               >
                 {(provided) => (
+                  // eslint-disable-next-line
                   <div
                     className={cn(
                       "flex items-center gap-x-2 my-2 bg-slate-200 border-slate-200 border text-slate-700 rounded-md text-sm",

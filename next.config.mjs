@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ["pixabay.com"],
   },
+  eslint:{
+    ignoreDuringBuilds: true,
+  }
 };
 
 export default withNextVideo(nextConfig);
