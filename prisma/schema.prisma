@@ -59,7 +59,7 @@ model User {
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
-  notes         Note[]
+  notes                 Note[]
   credits               Int                    @default(10)
 
   @@map("users")
