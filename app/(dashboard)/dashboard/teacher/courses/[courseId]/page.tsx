@@ -65,7 +65,7 @@ const CoursePage = async ({ params }: { params: { courseId: string } }) => {
   }
   let options: OptionType[] = [];
   if (!categories || categories.length === 0) {
-    alert("No categories available.");
+    console.log("No categories available.");
   } else {
     options = categories.map((category) => ({
       label: category.name,
