@@ -5,14 +5,11 @@ import { LogOut } from "lucide-react";
 import Link from "next/link";
 import { SearchInput } from "@/components/search-input";
 import { Button } from "@/components/ui/button";
-import { AvatarDemo } from "@/components/avatar";
-import { useAuthStore } from "@/stores/useAuthStore";
-import { UserButton } from "@/components/user-btn";
+import { UserButton } from "@clerk/nextjs";
 
 export const NavbarRoutes = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuthStore();
 
   const isTeacherPage = pathname?.startsWith("/dashboard/teacher");
   const isPlayerPage = pathname?.startsWith("/dashboard");
@@ -33,26 +30,22 @@ export const NavbarRoutes = () => {
               Exit
             </Button>
           </Link>
-        ) : (
-          isPlayerPage?(
-            <Link href="/dashboard/teacher/courses">
+        ) : isPlayerPage ? (
+          <Link href="/dashboard/teacher/courses">
             <Button size="sm" variant="ghost">
               Student
             </Button>
           </Link>
-          ):(
-            <Link href="/dashboard/teacher/courses">
+        ) : (
+          <Link href="/dashboard/teacher/courses">
             <Button size="sm" variant="ghost">
               TeacherMode
             </Button>
           </Link>
-          )
-          
         )}
 
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
         {/* <UserButton afterSignOutUrl='/'/> */}
-
       </div>
     </>
   );

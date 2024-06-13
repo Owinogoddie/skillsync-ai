@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
-import { useAuthModalStore } from "@/stores/useAuthModalStore";
 import Link from "next/link";
 import { CourseModal } from "./_components/course-modal";
 import { LinearCombobox } from "@/components/linear-combo";
@@ -11,7 +10,6 @@ import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
 
 export default function Home() {
   const { isLoaded, userId } = useAuth();
-  const { onOpen } = useAuthModalStore();
 
   // useEffect(() => {
   //   const fetchData = async () => {

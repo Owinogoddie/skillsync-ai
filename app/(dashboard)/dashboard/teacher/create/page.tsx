@@ -19,8 +19,7 @@ import Link from "next/link";
 // import axios from "axios"
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import db from "@/lib/localBase/db";
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuth } from "@clerk/nextjs";
 // import toast from "react-hot-toast"
 
 const formSchema = z.object({
@@ -30,8 +29,9 @@ const formSchema = z.object({
 });
 
 const CreatePage = () => {
+  
+  const { userId } = useAuth();
   const router = useRouter();
-  const {user}=useAuthStore()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -44,7 +44,7 @@ const CreatePage = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post("/api/courses", {...values,userId:user?.id});
+      const response = await axios.post("/api/courses", {...values,userId});
       router.push(`/dashboard/teacher/courses/${response.data.id}`);
       toast.success("Course created");
     } catch (error) {

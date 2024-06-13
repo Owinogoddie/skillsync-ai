@@ -23,7 +23,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   try {
-    // console.log(session?.user)
     // const yt = new youtube.Scraper()
     // const results = await yt.search("Javascript");
 
