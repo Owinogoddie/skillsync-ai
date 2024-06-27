@@ -21,7 +21,7 @@ export function CourseModal() {
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline" size="sm">
-          Create course
+          Create new course
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -32,9 +32,9 @@ export function CourseModal() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <Button asChild variant="outline" size="sm">
+          {/* <Button asChild variant="outline" size="sm">
             <Link href="/dashboard/teacher/courses">Create Manually</Link>
-          </Button>
+          </Button> */}
           <Button asChild variant="outline" size="sm">
             <Link href="/dashboard/autogen">Generate with ai</Link>
           </Button>

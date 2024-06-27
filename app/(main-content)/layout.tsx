@@ -29,9 +29,9 @@ const Layout = async ({ children }: { children: React.ReactNode }) => {
         // Add any other necessary user fields
       },
     });
-    console.log(`Created new user in DB for userId: ${userId}`);
+    // console.log(`Created new user in DB for userId: ${userId}`);
   } else {
-    console.log(`User already exists in DB for userId: ${userId}`);
+    // console.log(`User already exists in DB for userId: ${userId}`);
   }
   return <div>{children}</div>;
 };

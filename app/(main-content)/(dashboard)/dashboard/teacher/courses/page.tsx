@@ -6,6 +6,7 @@ import { columns } from './_components/columns'
 import { redirect } from 'next/navigation'
 import db from '@/lib/db'
 import { getUserId } from '@/lib/get-userId'
+import { CourseModal } from '@/app/(landing)/_components/course-modal'
 
 
 const CoursesPage = async() => {
@@ -26,13 +27,9 @@ const CoursesPage = async() => {
   
   return (
     <div className="p-6">
-        {/* <Link href="/teacher/create">
-        <Button>
-            New Course
-        </Button>
-        </Link> */}
-
 <div className="container mx-auto py-10">
+<CourseModal />
+
       <DataTable columns={columns} data={courses} />
     </div>
 

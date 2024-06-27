@@ -5,6 +5,11 @@
 .cl-internal-180wb59{
   display: none;
 }
+.loader {
+	border-top-color: #3498db;
+	-webkit-animation: spinner 1.5s linear infinite;
+	animation: spinner 1.5s linear infinite;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;

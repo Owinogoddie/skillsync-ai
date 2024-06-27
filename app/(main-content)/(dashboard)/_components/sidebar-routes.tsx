@@ -3,6 +3,7 @@ import React from "react";
 import { BarChart, Compass, Layout, List } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SidebarItem } from "./sidebar-item";
+
 const guestRoutes = [
   {
     icon: Layout,
@@ -15,6 +16,7 @@ const guestRoutes = [
     href: "/dashboard/search",
   },
 ];
+
 const teacherRoutes = [
   {
     icon: List,
@@ -27,16 +29,17 @@ const teacherRoutes = [
     href: "/dashboard/teacher/analytics",
   },
 ];
+
 const aiGenRoutes = [
   {
     icon: List,
-    label: "Courses",
-    href: "#",
+    label: "AI Generated Courses",
+    href: "/dashboard/teacher/courses",
   },
   {
     icon: BarChart,
-    label: "Analytics",
-    href: "#",
+    label: "AI Analytics",
+    href: "/dashboard/teacher/analytics",
   },
 ];
 
@@ -44,23 +47,22 @@ export const SidebarRoutes = () => {
   const pathname = usePathname();
   const isTeacherPage = pathname?.includes("/dashboard/teacher");
   const isAiRoute = pathname?.includes("/dashboard/autogen");
-  const isPlayerRoute = pathname==="/dashboard" ||"/dashboard/search";
+  const isGuestRoute = pathname === "/dashboard" || pathname === "/dashboard/search";
 
   const getRoutes = () => {
-    let routes;
     if (isTeacherPage) {
-      routes = teacherRoutes;
+      return teacherRoutes;
     }
     if (isAiRoute) {
-      routes = aiGenRoutes;
-    } else {
-      routes=guestRoutes;
+      return aiGenRoutes;
     }
-    return routes
+    return guestRoutes;
   };
-  const routes=getRoutes();
+
+  const routes = getRoutes();
+
   return (
-    <div className="flex flex-col w-full ">
+    <div className="flex flex-col w-full">
       {routes?.map((route) => (
         <SidebarItem
           key={route.href}

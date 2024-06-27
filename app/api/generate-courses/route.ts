@@ -2,18 +2,28 @@ import db from "@/lib/db";
 import Groq from "groq-sdk";
 import { getUserId } from "@/lib/get-userId";
 import { NextResponse } from "next/server";
-import { cleaned } from './coursetest';
-import { generateImageQuery } from "./generate-image-searchQuery";
+import { generatePexelsImageUrl } from "./generate-pexels-imageurl";
+
+// Define the structure of a unit
+interface Unit {
+  name?: string;
+  chapterCount: number;
+}
+
+// Define the structure of the request body
+interface RequestBody {
+  title: string;
+  units: Unit[];
+}
 
 export async function POST(req: Request) {
-  const testcourse = cleaned;
   const userId = await getUserId();
 
   if (!userId) {
     return new NextResponse("Unauthorized", { status: 401 });
   }
 
-  const body = await req.json();
+  const body: RequestBody = await req.json();
   const { title, units } = body;
 
   const system_prompt = `
@@ -36,29 +46,6 @@ export async function POST(req: Request) {
               "chapter_title": "string",
               "chapter_description": "string",
               "chapter_youtube_search_query": "string"
-            },
-            {
-              "chapter_number": "integer",
-              "chapter_title": "string",
-              "chapter_description": "string",
-              "chapter_youtube_search_query": "string"
-            }
-          ]
-        },
-        {
-          "unit_name": "string",
-          "chapters": [
-            {
-              "chapter_number": "integer",
-              "chapter_title": "string",
-              "chapter_description": "string",
-              "chapter_youtube_search_query": "string"
-            },
-            {
-              "chapter_number": "integer",
-              "chapter_title": "string",
-              "chapter_description": "string",
-              "chapter_youtube_search_query": "string"
             }
           ]
         }
@@ -66,7 +53,13 @@ export async function POST(req: Request) {
     }
   `;
 
-  const input_text = `Generate 5 course units with 5 chapters each for the course ${title}.`;
+  const input_text = `Generate a course with the title "${title}" and the following units:
+    ${units.map((unit: Unit, index: number) => `
+      Unit ${index + 1}: ${unit.name ? unit.name : '[Generate an appropriate name for this unit]'}
+      Number of chapters: ${unit.chapterCount}
+    `).join('\n')}
+    For any unit without a name, please generate an appropriate and descriptive name based on the course title and the unit's position in the course.
+    Ensure that each unit has the specified number of chapters.`;
 
   const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY,
@@ -100,12 +93,12 @@ export async function POST(req: Request) {
       courseData = cleanedResponse;
     }
 
-    const imageURL = await generateImageQuery(courseData.unsplash_image_query);
+    const imageURL = await generatePexelsImageUrl(courseData.unsplash_image_query);
 
     const course = await db.course.create({
       data: {
         title: courseData.course_name,
-        userId: userId!, // non-null assertion since we checked earlier
+        userId: userId,
         imageUrl: imageURL,
         description: courseData.course_description,
       },
@@ -137,6 +130,7 @@ export async function POST(req: Request) {
         });
       }
     }
+    console.log(course)
 
     return NextResponse.json(course, { status: 200 });
   } catch (error) {

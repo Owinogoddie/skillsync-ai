@@ -19,12 +19,22 @@ const CoursePage = async ({ params }: { params: { courseId: string } }) => {
   if (!userId) {
     return redirect("/");
   }
+  
   const course = await db.course.findUnique({
     where: {
       id: params.courseId,
       userId,
     },
     include: {
+      units: {
+        include: {
+          chapters: {
+            orderBy: {
+              position: "asc",
+            },
+          },
+        },
+      },
       chapters: {
         orderBy: {
           position: "asc",
@@ -37,6 +47,7 @@ const CoursePage = async ({ params }: { params: { courseId: string } }) => {
       },
     },
   });
+
   if (!course) {
     return redirect("/");
   }
@@ -46,23 +57,30 @@ const CoursePage = async ({ params }: { params: { courseId: string } }) => {
       name: "asc",
     },
   });
-  const requiredFields = [
-    course.title,
-    course.description,
-    course.imageUrl,
-    // course.price,
-    course.categoryId,
-    course.chapters.some((chapter) => chapter.isPublished),
-  ];
-  const totalFields = requiredFields.length;
-  const completedFields = requiredFields.filter(Boolean).length;
 
-  const completionText = `(${completedFields}/${totalFields})`;
-  const isCompleted = requiredFields.every(Boolean);
+  const requiredFields = [
+    { name: "Title", value: course.title },
+    { name: "Description", value: course.description },
+    { name: "Image", value: course.imageUrl },
+    { name: "Category", value: course.categoryId },
+    { name: "Chapters", value: course.chapters.some((chapter) => chapter.isPublished) },
+  ];
+
+  const completedFields = requiredFields.filter((field) => field.value).length;
+  const totalFields = requiredFields.length;
+
+  const incompletedFields = requiredFields
+    .filter((field) => !field.value)
+    .map((field) => field.name);
+
+  const completionText = `${completedFields} / ${totalFields}`;
+  const isCompleted = completedFields === totalFields;
+
   interface OptionType {
     label: string;
     value: string;
   }
+
   let options: OptionType[] = [];
   if (!categories || categories.length === 0) {
     console.log("No categories available.");
@@ -72,6 +90,7 @@ const CoursePage = async ({ params }: { params: { courseId: string } }) => {
       value: category.id,
     }));
   }
+
   return (
     <>
       {!course.isPublished && (
@@ -83,10 +102,14 @@ const CoursePage = async ({ params }: { params: { courseId: string } }) => {
           <div className="flex flex-col gap-y-2">
             <h1 className="text-2xl font-medium">Course setup</h1>
             <span className="text-sm text-slate-700">
-              Complete all fields {completionText}
+              Completed fields: {completionText}
             </span>
+            {!isCompleted && (
+              <span className="text-sm text-red-500">
+                Incomplete fields: {incompletedFields.join(", ")}
+              </span>
+            )}
           </div>
-          {/* Actions */}
           <Actions
             disabled={!isCompleted}
             courseId={params.courseId}
@@ -102,7 +125,7 @@ const CoursePage = async ({ params }: { params: { courseId: string } }) => {
             <TitleForm initialData={course} courseId={course.id} />
             <DescriptionForm initialData={course} courseId={course.id} />
             <ImageForm initialData={course} courseId={course.id} />
-            {options && (
+            {options.length > 0 && (
               <CategoryForm
                 initialData={course}
                 courseId={course.id}
@@ -116,9 +139,7 @@ const CoursePage = async ({ params }: { params: { courseId: string } }) => {
                 <IconBadge icon={ListChecks} />
                 <h2 className="text-xl">Course Chapters</h2>
               </div>
-              <div>
-                <ChaptersForm initialData={course} courseId={course.id} />
-              </div>
+              <ChaptersForm initialData={course} courseId={course.id} />
             </div>
             <div>
               <div className="flex items-center gap-x-2">

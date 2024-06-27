@@ -1,11 +1,10 @@
 import { getUserId } from "@/lib/get-userId";
 import { redirect } from "next/navigation";
-import { BookmarkCheck, File } from "lucide-react";
+import { File } from "lucide-react";
 
 import { getChapter } from "@/actions/get-chapter";
 import { Banner } from "@/components/banner";
 import { Separator } from "@/components/ui/separator";
-import { Preview } from "@/components/preview";
 import { VideoPlayer } from "./_components/video-player";
 import { CourseEnrollButton } from "./_components/course-enroll-button";
 import { CourseProgressButton } from "./_components/course-progress-button";
@@ -13,6 +12,7 @@ import { GenerateSummary } from "./_components/generate-summary-and-qns";
 import { Notes } from "./_components/notes";
 import db from "@/lib/db";
 import QuizCards from "./_components/quiz-cards";
+import { ChatWindow } from "./_components/chat-window";
 
 const ChapterIdPage = async ({
   params,
@@ -64,13 +64,14 @@ const ChapterIdPage = async ({
 
   return (
     <div>
+      {/* <LoadEmbeddings userId={userId} chapterId={chapterId}/> */}
       {userProgress?.isCompleted && (
         <Banner variant="success" label="You already completed this chapter." />
       )}
       {isLocked && (
         <Banner
           variant="warning"
-          label="You need to purchase this course to watch this chapter."
+          label="You need to enroll to this course to watch this chapter."
         />
       )}
       <div className="flex flex-col max-w-4xl mx-auto pb-20 pt-2">
@@ -151,6 +152,13 @@ const ChapterIdPage = async ({
           )}
         </div>
       </div>
+      {chapter.videoId && (
+        <ChatWindow
+          chapterId={params.chapterId}
+          videoId={chapter.videoId}
+          userId={userId}
+        />
+      )}
     </div>
   );
 };

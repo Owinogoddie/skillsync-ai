@@ -7,6 +7,9 @@ import { CourseModal } from "./_components/course-modal";
 import { LinearCombobox } from "@/components/linear-combo";
 import { searchYoutube } from "@/lib/youtube";
 import { SignInButton, UserButton, useAuth } from "@clerk/nextjs";
+import { Hero } from "./_components/hero";
+import { WhyUs } from "@/components/why-us";
+import { Testimonials } from "@/components/testimonials";
 
 export default function Home() {
   const { isLoaded, userId } = useAuth();
@@ -53,10 +56,10 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="p-6">
-        {" "}
-        Landing Page
-        <LinearCombobox />
+      <div className="p-6 max-w-7xl mx-auto flex flex-col items-center justify-center">
+       <Hero/>
+       <WhyUs/>
+       <Testimonials/>
       </div>
     </div>
   );
