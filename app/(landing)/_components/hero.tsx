@@ -48,7 +48,7 @@ const Hero: React.FC = () => {
             )}
           </motion.button>
           <motion.button
-            className="bg-primary text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-primary-dark transition duration-300"
+            className="bg-slate-900 text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-primary-dark transition duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
