@@ -1,35 +1,34 @@
-// src/_components/Hero.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import ScrollAnimation from '../animations/scroll-animation';
 import Link from 'next/link';
 
-const Hero: React.FC = () => {
+const CTA: React.FC = () => {
   return (
-    <header className="bg-gradient-to-br from-gradient-start to-gradient-end text-white py-32">
+    <section className="bg-gray-600 text-white py-20">
       <div className="container mx-auto text-center px-4">
         <ScrollAnimation direction="down">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Create AI-Powered Courses with Ease
-          </h1>
+          <h2 className="text-3xl font-bold mb-4">
+            Ready to Transform Your Course Creation and learning?
+          </h2>
         </ScrollAnimation>
         <ScrollAnimation>
           <p className="text-xl mb-8">
-            SkillSync AI: Your personal course creation and management assistant
+            Join thousands of students using SkillSync AI to create engaging courses.
           </p>
         </ScrollAnimation>
         <ScrollAnimation direction="up">
           <motion.button
-            className="bg-primary text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-primary-dark transition duration-300"
+            className="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold text-lg hover:bg-indigo-100 transition duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <Link href="/dashboard">Get Started Free</Link>
+            <Link href="/dashboard/autogen">Start Your Free Trial</Link>
           </motion.button>
         </ScrollAnimation>
       </div>
-    </header>
+    </section>
   );
 };
 
-export default Hero;
+export default CTA;

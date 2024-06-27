@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
-export function CourseModal() {
+interface modalprops{className?:string}
+export function CourseModal({className}:modalprops) {
   const [isMounted , setIsmounted]=useState(false)
   useEffect(()=>{
     setIsmounted(true)
@@ -20,7 +20,7 @@ export function CourseModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button variant="outline" size="sm" className={className}>
           Create new course
         </Button>
       </DialogTrigger>

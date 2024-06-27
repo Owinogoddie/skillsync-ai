@@ -19,6 +19,13 @@ const config = {
     },
     extend: {
       colors: {
+        'dark-gray': {
+          900: '#1a202c',
+          800: '#2d3748',
+          700: '#4a5568',
+        },
+        'gradient-start': '#2d3748',
+        'gradient-end': '#1a202c',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
