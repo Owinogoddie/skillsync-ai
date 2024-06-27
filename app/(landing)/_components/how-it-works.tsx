@@ -5,7 +5,10 @@ const HowItWorks: React.FC = () => {
   const steps = [
     { step: 1, title: "Input Your Topic", description: "Enter the subject you want to teach" },
     { step: 2, title: "AI Generation", description: "Our AI creates course content and structure" },
-    { step: 3, title: "Customize & Publish", description: "Review, edit, and publish your course" }
+    { step: 3, title: "Customize & Publish", description: "Review, edit, and publish your course" },
+    { step: 4, title: "Browse Courses", description: "Search among the generated courses for your course" },
+    { step: 3, title: "Enroll to the course", description: "Enroll to the course to start learning" },
+    { step: 3, title: "Track your progress", description: "Track the progress of your courses" },
   ];
 
   return (

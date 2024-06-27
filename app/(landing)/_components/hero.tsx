@@ -25,6 +25,7 @@ const Hero: React.FC = () => {
         </ScrollAnimation>
         <ScrollAnimation direction="up">
 
+          <div className="flex items-center justify-center gap-x-4">
           <motion.button
             className="bg-primary text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-primary-dark transition duration-300"
             whileHover={{ scale: 1.05 }}
@@ -32,7 +33,7 @@ const Hero: React.FC = () => {
           >
             {userId ? (
               
-            <Link href="/dashboard/autogen">Get Started Free</Link>
+            <Link href="/dashboard/autogen">Generate For Free</Link>
               
             ) : (
               <>
@@ -46,6 +47,29 @@ const Hero: React.FC = () => {
               </>
             )}
           </motion.button>
+          <motion.button
+            className="bg-primary text-white px-8 py-3 rounded-full font-semibold text-lg hover:bg-primary-dark transition duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {userId ? (
+              
+            <Link href="/dashboard">Browse courses</Link>
+              
+            ) : (
+              <>
+                {!isLoaded ? (
+                  <Loader2 className="animate-spin h-4 w-4" />
+                ) : (
+                  <SignInButton mode="modal">
+                      SignIn
+                  </SignInButton>
+                )}
+              </>
+            )}
+          </motion.button>
+
+          </div>
         </ScrollAnimation>
       </div>
     </header>
